@@ -18,6 +18,7 @@ const SnippetCard = ({ snippet, onCopy, onDelete, onToggleFavourite }) => {
         <div>
         <h3>{snippet.title}</h3>
         <p>{snippet.description}</p>
+        <p>Language: {snippet.language}</p>
         </div>
         <div className='snippet-card-actions'>
           <button
