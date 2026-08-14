@@ -1,0 +1,457 @@
+/* =========================================================================
+   Snippet Manager — Stylesheet
+   =========================================================================
+   Semantic class names, meant to be attached to your own JSX structure.
+   Matches the dark / violet-accent theme from the React demo.
+   Organized to mirror the component list: app shell, search/filter bar,
+   snippet card, form modal, and shared utility classes at the bottom.
+   ========================================================================= */
+
+:root {
+  --bg: #09090b;           /* app background */
+  --panel: #18181b;        /* cards, inputs, form background */
+  --panel-hover: #27272a;
+  --border: #27272a;
+  --border-hover: #3f3f46;
+  --text: #f4f4f5;
+  --text-muted: #a1a1aa;
+  --text-faint: #71717a;
+  --accent: #7c3aed;       /* violet — primary actions */
+  --accent-hover: #6d28d9;
+  --favorite: #fbbf24;     /* amber — favorite star */
+  --danger: #f87171;
+  --success: #34d399;
+  --panel-translucent: rgba(24, 24, 27, 0.6); /* theme-aware card background */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+}
+
+[data-theme="light"] {
+  --bg: #ffffff;
+  --panel: #f4f4f5;
+  --panel-hover: #e4e4e7;
+  --border: #e4e4e7;
+  --border-hover: #d4d4d8;
+  --text: #18181b;
+  --text-muted: #52525b;
+  --text-faint: #71717a;
+  --accent: #7c3aed;
+  --accent-hover: #6d28d9;
+  --favorite: #d97706;
+  --danger: #dc2626;
+  --success: #059669;
+  --panel-translucent: rgba(244, 244, 245, 0.9); /* light, near-opaque panel */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+}
+
+/* ---- App shell --------------------------------------------------------- */
+
+.app {
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.app-container {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.app-header .count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-faint);
+  margin-left: 4px;
+}
+
+.app-icon {
+  color: var(--accent);
+}
+
+/* ---- Search + New button row ------------------------------------------- */
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+}
+
+.search-bar {
+  position: relative;
+  flex: 1;
+}
+
+.search-bar svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-faint);
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.search-bar input {
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px 12px 8px 36px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.35);
+}
+
+.search-bar input::placeholder {
+  color: var(--text-faint);
+}
+
+/* ---- Tag filter --------------------------------------------------------- */
+
+.tag-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-button {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.tag-button:hover {
+  border-color: var(--border-hover);
+}
+
+.tag-button.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+/* also used for the small read-only tag chips inside a snippet card */
+.tag-chip {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+  background: var(--panel-hover);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+/* ---- Snippet list + card ------------------------------------------------- */
+
+.snippet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.snippet-list-empty {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-faint);
+  padding: 32px 0;
+}
+
+.snippet-card {
+  background: var(--panel-translucent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.snippet-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.snippet-card-head h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.snippet-card-head p {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--text-faint);
+}
+
+.snippet-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--text-faint);
+  display: flex;
+}
+
+.icon-button:hover {
+  background: var(--panel-hover);
+}
+
+.icon-button.favorite.active svg {
+  color: var(--favorite);
+  fill: var(--favorite);
+}
+
+.icon-button.delete:hover svg {
+  color: var(--danger);
+}
+
+.snippet-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tag-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.copy-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--panel-hover);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.copy-button:hover {
+  background: var(--border-hover);
+}
+
+.copy-button.copied {
+  color: var(--success);
+}
+
+/* ---- Code block ---------------------------------------------------------- */
+/* Intentionally always dark, regardless of theme — matches convention from
+   GitHub/VS Code/etc. where code blocks stay dark even on a light page. */
+
+.code-block {
+  background: #000000;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  overflow-x: auto;
+}
+
+.code-block code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  color: #e4e4e7;
+  white-space: pre;
+}
+
+/* ---- Form modal ----------------------------------------------------------- */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 50;
+}
+
+.snippet-form {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.snippet-form-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.snippet-form-head h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.snippet-form-head button {
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.snippet-form input,
+.snippet-form select,
+.snippet-form textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 15px;
+  color: var(--text);
+  font-family: var(--font-ui);
+}
+
+.snippet-form textarea {
+  font-family: var(--font-mono);
+  height: 150px;
+  resize: vertical;
+}
+
+.snippet-form input:focus,
+.snippet-form select:focus,
+.snippet-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.submit-button {
+  width: 100%;
+  background: var(--accent);
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 10px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background: var(--accent-hover);
+}
+
+.new-button {
+  background: var(--accent);
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 8px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.new-button:hover {
+  background: var(--accent-hover);
+}
+
+/* ---- Responsive ----------------------------------------------------------- */
+
+@media (max-width: 480px) {
+  .app {
+    padding: 16px;
+  }
+  .snippet-card-head {
+    flex-direction: column;
+  }
+}
+
+/* ---- Accessibility --------------------------------------------------------- */
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+/* ---- Theme toggle ----------------------------------------------------------- */
+
+.theme-toggle {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+}
+
+.theme-toggle:hover {
+  background: var(--panel-hover);
+}
