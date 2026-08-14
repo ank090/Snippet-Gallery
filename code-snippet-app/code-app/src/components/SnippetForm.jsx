@@ -3,7 +3,7 @@ import { X } from 'lucide-react'
 
 const SnippetForm = ({ onSubmit, onClose }) => {
     const [title, setTitle] = useState('');
-    const [language, setLanguage] = useState('');
+    const [language, setLanguage] = useState('Python');
     const [description, setDescription] = useState('');
     const [code, setCode] = useState('');
     const [tags, setTags] = useState('');
@@ -17,7 +17,7 @@ const SnippetForm = ({ onSubmit, onClose }) => {
                     <button><X /></button>
                 </div>
                 <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title"></input>
-                <select>
+                <select value={language}>
                     <option value='Python'>Python</option>
                     <option value='C#'>C#</option>
                     <option value='Java'>Java</option>
