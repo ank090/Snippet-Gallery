@@ -11,7 +11,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://snippet-gallery-g74lal8bs-ank090s-projects.vercel.app"],
+    allow_origins=["https://snippet-gallery-git-main-ank090s-projects.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
