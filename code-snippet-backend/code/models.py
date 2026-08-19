@@ -1,5 +1,3 @@
-
-
 from pydantic import BaseModel
 
 class Snippet(BaseModel):
@@ -9,3 +7,15 @@ class Snippet(BaseModel):
     tags: str
     description: str
     isFavorite: bool
+
+class UserCreate(BaseModel):
+    email: str
+    password: str
+
+class UserOut(BaseModel):
+    id: int
+    email: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
