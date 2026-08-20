@@ -455,3 +455,320 @@ textarea:focus-visible {
 .theme-toggle:hover {
   background: var(--panel-hover);
 }
+
+/* =========================================================================
+   Auth pages — Login / Signup
+   =========================================================================
+   Reuses .snippet-form's input/textarea/select styling conventions and
+   .submit-button, so a lot of the visual language is already shared.
+   See the class-to-element comments below each rule for where each one
+   goes in your JSX.
+   ========================================================================= */
+
+/* Full-page centering wrapper.
+   Put this on the outermost <div> of your LoginPage/SignupPage component
+   (NOT inside the modal-overlay pattern — this is a full route/page,
+   not a popup on top of the app). */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--bg);
+}
+
+/* The centered card containing the form itself.
+   Put this on the <div> (or <form>'s wrapper) directly inside .auth-page. */
+.auth-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* App branding row at the top of the card (icon + "Snippet Gallery").
+   Put this on a <div> wrapping your <Code2 /> icon + <h1>/<p>, same
+   pattern as .app-header, just centered instead of left-aligned. */
+.auth-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+/* The app icon inside .auth-header — reuses the same accent color as
+   .app-icon elsewhere in the app, just larger for a page-level header. */
+.auth-header svg {
+  color: var(--accent);
+  width: 32px;
+  height: 32px;
+}
+
+.auth-header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text);
+}
+
+/* Small subtitle under the title, e.g. "Sign in to your account". */
+.auth-header p {
+  font-size: 13px;
+  color: var(--text-faint);
+  margin: 0;
+}
+
+/* The <form> itself. Its <input>s automatically pick up styling from
+   the existing .snippet-form input rule below — no need to duplicate it,
+   just make sure this form ALSO has className="snippet-form" alongside
+   "auth-form", e.g. className="snippet-form auth-form". Two classes on
+   one element is normal — see the "combining classes" note further down. */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Wraps a single label + input pair, e.g. "Email" + its input.
+   Put this on a <div> wrapping each <label> + <input>. */
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.auth-field label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+/* Inline error message under the form, e.g. "Incorrect email or password".
+   Put this on a <p> that only renders when there's an error to show. */
+.auth-error {
+  font-size: 13px;
+  color: var(--danger);
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+}
+
+/* The "Log In" / "Sign Up" submit button — reuses .submit-button as-is,
+   no new class needed. Just write:
+     <button className="submit-button" type="submit">Log In</button>
+   directly, same as your SnippetForm's submit button. */
+
+/* Row at the bottom of the card, e.g. "Don't have an account? Sign up".
+   Put this on a <p> or <div> below the form. */
+.auth-footer {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-faint);
+  margin-top: 4px;
+}
+
+/* The clickable "Sign up" / "Log in" link/button inside .auth-footer.
+   If it's a <button> styled to look like a link (recommended over an
+   <a> tag, since it's toggling state, not navigating to a URL), use this. */
+.auth-link {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  font-size: 13px;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+  color: var(--accent-hover);
+}
+
+
+/* =========================================================================
+   Auth page — Login / Signup
+   =========================================================================
+   Used by the Auth.jsx component (shared for both login and signup —
+   isSignUp prop just swaps text, same visual shape for both).
+   ========================================================================= */
+
+/* Outermost <div> — the full-page centering wrapper.
+   className="auth-page" */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--bg);
+}
+
+/* Second <div> — the actual card holding the heading, form, and footer.
+   className="auth-card" */
+.auth-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* <h2> "Create Account" / "Welcome Back" */
+.auth-card h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+}
+
+/* Error message <div> — only rendered when `error` is truthy.
+   className="auth-error" */
+.auth-error {
+  font-size: 13px;
+  color: var(--danger);
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+}
+
+/* <form> — className="auth-form".
+   Its <input>s are targeted below via "auth-form input", so they need
+   no class of their own. */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-form input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 15px;
+  color: var(--text);
+  font-family: var(--font-ui);
+}
+
+.auth-form input::placeholder {
+  color: var(--text-faint);
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.35);
+}
+
+/* Submit <button> — className="submit-button" (reuses the one already
+   defined earlier in this file for SnippetForm — no new rule needed,
+   just apply the same class). Disabled state added here since this
+   button uses the `disabled={isLoading}` prop, which .submit-button
+   alone didn't need to handle before. */
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* <p> footer line — "Already have an account? [Log In]"
+   className="auth-footer" */
+.auth-footer {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-faint);
+  margin: 0;
+}
+
+/* The toggle <button> inside .auth-footer ("Log In" / "Sign Up" link).
+   className="auth-link" */
+.auth-link {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+  color: var(--accent-hover);
+}
+
+/* ---- Header actions (theme toggle + logout) ---------------------------- */
+/* Wraps the theme-toggle and logout buttons so they group together and
+   push to the right of the header, instead of sitting right next to the
+   title. Put this on the <div> wrapping both buttons.
+   className="header-actions" */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto; /* pushes this whole group to the far right */
+}
+
+/* Logout button. className="logout-button" */
+.logout-button {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background: var(--panel-hover);
+  border-color: var(--border-hover);
+  color: var(--text);
+}
+
+/* ---- Auth page branding (app name shown above the login/signup form) --- */
+/* Wraps the app icon + name at the top of the auth card, above the
+   "Create Account" / "Welcome Back" heading. Put this on a <div>
+   wrapping your <Code2 /> icon + a <span>/<h1> with the app name.
+   className="auth-brand" */
+.auth-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+/* The icon inside .auth-brand — same accent color as .app-icon
+   elsewhere, sized slightly larger since this is a page-level header
+   rather than a compact toolbar header. */
+.auth-brand svg {
+  color: var(--accent);
+  width: 24px;
+  height: 24px;
+}
+
+/* The app name text itself, e.g. "Snippet Gallery". */
+.auth-brand span {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
