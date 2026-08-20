@@ -15,7 +15,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://snippet-gallery.vercel.app"],#, "http://127.0.0.1:8000"],
+    allow_origins=["https://snippet-gallery.vercel.app", "http://127.0.0.1:5173", "http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -88,6 +88,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 async def add_snippets(
     request: List[Snippet],
     db: Session = Depends(get_db),
+    current_user: user_schema.UserSchema = Depends(get_current_user)
 ):
     for snippet in request:
         db_snippet = snippet_schema.SnippetSchema(
@@ -97,6 +98,7 @@ async def add_snippets(
             tags=snippet.tags,
             description=snippet.description,
             isFavorite=snippet.isFavorite,
+            owner_id = current_user.id
         )
         db.add(db_snippet)
     db.commit()
@@ -104,15 +106,15 @@ async def add_snippets(
 
 # Get all Snippets
 @app.get("/snippets")
-async def get_all_snippets(db: Session = Depends(get_db)):
+async def get_all_snippets(db: Session = Depends(get_db), current_user: user_schema.UserSchema = Depends(get_current_user)):
     try:
-        snippets = db.query(snippet_schema.SnippetSchema).all()
+        snippets = db.query(snippet_schema.SnippetSchema).filter(snippet_schema.SnippetSchema.owner_id == current_user.id).all()
         return snippets
     except ResponseValidationError as ex:
         HTTPException(status_code=400, detail=ex.body)
 
 # Get Snippets based on an id
-@app.get("/snippets")
+@app.get("/snippets/{snippet_id}")
 async def get_snippet(snippet_id: int, db: Session = Depends(get_db)):
     if snippet_id <= 0:
         return {"error": "Invalid snippet ID. It must be a positive integer."}
@@ -122,7 +124,7 @@ async def get_snippet(snippet_id: int, db: Session = Depends(get_db)):
 
 # Delete Snippets based on an id
 @app.delete("/snippets/delete/{snippet_id}")
-async def delete_snippet(snippet_id: int, db: Session = Depends(get_db)):
+async def delete_snippet(snippet_id: int, db: Session = Depends(get_db), current_user: user_schema.UserSchema = Depends(get_current_user)):
     if snippet_id <= 0:
         return {"error": "Invalid snippet ID. It must be a positive integer."}
     snippet = db.query(snippet_schema.SnippetSchema).filter(snippet_schema.SnippetSchema.id == snippet_id).first()
@@ -135,7 +137,7 @@ async def delete_snippet(snippet_id: int, db: Session = Depends(get_db)):
 
 # Update Snippets based on an id
 @app.put("/snippets/update/{snippet_id}")
-async def update_snippet(snippet_id: int, updated_snippet: Snippet, db: Session = Depends(get_db)):
+async def update_snippet(snippet_id: int, updated_snippet: Snippet, db: Session = Depends(get_db), current_user: user_schema.UserSchema = Depends(get_current_user)):
     if snippet_id <= 0:
         return {"error": "Invalid snippet ID. It must be a positive integer."}
     snippet = db.query(snippet_schema.SnippetSchema).filter(snippet_schema.SnippetSchema.id == snippet_id).first()
@@ -153,7 +155,7 @@ async def update_snippet(snippet_id: int, updated_snippet: Snippet, db: Session 
 
 # Patch Snippets based on an id
 @app.patch("/snippets/favorite/{snippet_id}")
-async def toggle_favorite(snippet_id: int, db: Session = Depends(get_db)):
+async def toggle_favorite(snippet_id: int, db: Session = Depends(get_db), current_user: user_schema.UserSchema = Depends(get_current_user)):
     if snippet_id <= 0:
         return {"error": "Invalid snippet ID. It must be a positive integer."}
     snippet = db.query(snippet_schema.SnippetSchema).filter(snippet_schema.SnippetSchema.id == snippet_id).first()
